@@ -1,0 +1,35 @@
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation=
+"http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+<persistence-unit name="UnitatDePersistenciaPersistenciaEmpreses"
+transaction-type="RESOURCE_LOCAL">
+<provider>org.hibernate.ejb.HibernatePersistence</provider>
+<class>ioc.dam.m6.exemples.comandes.Comercial</class>
+<class>ioc.dam.m6.exemples.comandes.Client</class>
+<properties>
+<property name="javax.persistence.jdbc.url"
+value="jdbc:postgresql://localhost:5432/ioc_comandes"/>
+<property name="javax.persistence.jdbc.password"
+value="ioc"/>
+<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+<property name="javax.persistence.jdbc.user" value="ioc"/>
+</properties>
+</persistence-unit>
+<persistence-unit
+name="UnitatDePersistenciaPersistenciaProductes"
+transaction-type="RESOURCE_LOCAL">
+<provider>org.hibernate.ejb.HibernatePersistence</provider>
+<class>ioc.dam.m6.exemples.comandes.Producte</class>
+<class>ioc.dam.m6.exemples.comandes.Magatzem</class>
+<properties>
+<property name="javax.persistence.jdbc.url"
+value="jdbc:postgresql://localhost:5432/ioc_comandes"/>
+<property name="javax.persistence.jdbc.password"
+value="ioc"/>
+<property name="javax.persistence.jdbc.driver"
+value="org.postgresql.Driver"/>
+<property name="javax.persistence.jdbc.user" value="ioc"/>
+</properties>
+</persistence-unit>
+</persistence>
