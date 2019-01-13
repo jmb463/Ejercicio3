@@ -7,16 +7,19 @@ package testtema3;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 
 /**
  *
- * @author windeveloper
+ * @author windeveloper 
+ * prueba de updateo
  */
 @Entity
 public class Zona implements Serializable{
@@ -25,10 +28,12 @@ public class Zona implements Serializable{
     private int idZona;
     @Column(length=100)
     private String descripcion;
+    @OneToOne
+    private Comercial comercial;
     
     @ManyToMany(mappedBy="zona", fetch=FetchType.LAZY)
     @OrderBy(value="nombre")
-    private ArrayList <Cliente> clientes; //Recuperar de forma diferida ordenada por nombre
+    private List <Cliente> clientes; //Recuperar de forma diferida ordenada por nombre
 
     public int getIdZona() {
         return idZona;

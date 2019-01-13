@@ -10,7 +10,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.Persistence;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 
 /**
@@ -18,51 +21,46 @@ import javax.persistence.Query;
  * @author windeveloper
  */
 public class gestionEntidadesCliente implements Serializable {
-    ArrayList <Articulo> listaArticulos;
-    ArrayList <Zona> listaZonas;
-    ArrayList <Sector> listaSectores;
-    ArrayList <Cliente> listaClientes;
-    ArrayList <Comercial> listaComerciales;
     private static EntityManager em;
+    private static EntityManagerFactory emf;
     
     public gestionEntidadesCliente(EntityManager em){
-        this.listaArticulos = new ArrayList();
-        this.listaZonas = new ArrayList();
-        this.listaSectores = new ArrayList();
-        this.listaClientes = new ArrayList();
-        this.listaClientes = new ArrayList();
         this.em = em;
     }
     
     public void insertarClientes(Cliente c){
-        em.getTransaction().begin();
-        em.persist(c);
-        em.getTransaction().commit();
-    }
-    
-    public void modificarClietnes(Cliente c){
         try{
             em.getTransaction().begin();
-            c = em.merge(c);
+            em.persist(c);
+            em.getTransaction().commit();
+        }
+        catch(PersistenceException e){
+            System.out.println("No se pudo insertar el cliente por: " + e.getMessage());
+        }
+        
+    }
+    
+    public void modificarClietnes(Cliente c, int id){
+        try{
+            em.getTransaction().begin();
+            Cliente cm = em.getReference(Cliente.class, id); //cm = cliente modificado
+            cm.setNif(c.getNif());
+            cm.setNombre(c.getNombre());
             em.getTransaction().commit();
         }
         catch(EntityNotFoundException e){
-            e.getMessage();
+            System.out.println("No se puedo realizar la modificación del cliente por: " + e.getMessage());
         }
     }
     
     public void eliminarClientes(int id){
-        Cliente cliente = null;
-        em.getTransaction().begin();
         try {
-            cliente = em.getReference(Cliente.class, id);
-            cliente.getIdCliente();
-        } 
-        catch (EntityNotFoundException e) {
-            e.getMessage(); 
+            em.getTransaction().begin();
+            em.remove(em.getReference(Cliente.class, id));
+            em.getTransaction().commit();
+        } catch (EntityNotFoundException e) {
+            System.out.println("No se puedo eliminar el cliente por: " + e.getMessage());
         }
-        em.remove(cliente);
-        em.getTransaction().commit();
     }
     
     public Cliente obtenerClientePorID(int id){
@@ -70,28 +68,27 @@ public class gestionEntidadesCliente implements Serializable {
     } 
     
     public Cliente obtenerClientePorNIF(String nif){
-        Query q1 = em.createNamedQuery("Client.clientPerNif", Cliente.class);
+        Query q1 = em.createNamedQuery("Cliente.nif", Cliente.class);
         q1.setParameter("nif", nif);
         return (Cliente) q1.getSingleResult();
     }
     
-    public List<Cliente> obtenerClientePorNombre(String nom){
-        StringBuilder param = new StringBuilder();
-        Query q2 = em.createNamedQuery("Client.clientsPerNom", Cliente.class);
-        param.append("%");
-        param.append(nom);
-        param.append("%");
-        q2.setParameter("nom", param.toString());
+    public List<Cliente> obtenerClientePorNombre(String nombre){
+        Query q2 = em.createNamedQuery("Cliente.nombre", Cliente.class);
+        q2.setParameter("nombre", "%" + nombre + "%");
         return q2.getResultList();
     }
     
-    public List<Cliente> obtenerClientePorSector(Sector s){
-        Query q3 = em.createNamedQuery("Client.clientsDUnSector", Cliente.class);
-        //q3.setParameter("sector", Sector.getIdSector());
+    public List<Cliente> obtenerClientePorSector(Sector sector){
+        Query q3 = em.createNamedQuery("Cliente.sector", Cliente.class);
+        q3.setParameter("sector", sector.getIdSector());
         return q3.getResultList();
     }
     
     public static void Main(String []args){
+        emf = Persistence.createEntityManagerFactory("actividad3");
+        em = emf.createEntityManager();
+        
         gestionEntidadesCliente gec = new gestionEntidadesCliente(em);
     }
 }

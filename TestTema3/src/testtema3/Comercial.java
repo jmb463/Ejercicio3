@@ -9,6 +9,7 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -21,6 +22,8 @@ public class Comercial implements Serializable{
     private int idComercial;
     @Column(length=175)
     private String nombre;
+    @OneToOne
+    private Zona zona;
 
     public int getIdComercial() {
         return idComercial;
@@ -38,5 +41,12 @@ public class Comercial implements Serializable{
         this.nombre = nombre;
     }
     
+    public Zona getZona() {
+        return zona;
+    }
+
+    public void setZona(Zona zona) {
+        this.zona = zona;
+    }
     
 }

@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -25,19 +26,32 @@ import javax.persistence.UniqueConstraint;
     @UniqueConstraint(columnNames="nif") //Pone la columna nif como unique constraint)
 })
 @NamedQueries({ //Conseguimos realizar queries predefinidas
-    @NamedQuery(name="Client.clientsDUnSector", query= "SELECT c " + "FROM Cliente c " + "WHERE c.sector.id=:sector"),
-    @NamedQuery(name="Client.clientPerNif", query= "SELECT c " + "FROM Cliente c " + "WHERE c.nif=:nif"),
-    @NamedQuery(name="Client.clientsPerNom", query= "SELECT c " + "FROM Cliente c " + "WHERE c.nom like :nom")
+    @NamedQuery(name="Cliente.sector", query= "SELECT c FROM Cliente c WHERE c.sector.idSector=:sector"),
+    @NamedQuery(name="Cliente.nif", query= "SELECT c FROM Cliente c WHERE c.nif=:nif"),
+    @NamedQuery(name="Cliente.nombre", query= "SELECT c FROM Cliente c WHERE c.nombre LIKE :nombre")
 })
 
 public class Cliente implements Serializable{
     @Id 
-    @GeneratedValue(strategy=GenerationType.TABLE)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)//indica que la primary será usada como identificador
     private int idCliente;
     @Column(length=15) //No ponemos varchar porque el programa ya trata a los strings como varchar.
     private String nif;
     @Column(name="DENOMINACIO",length=120)
     private String nombre;
+    @ManyToOne //Añadimos foreign keys
+    private Sector sector;
+    @ManyToOne
+    private Zona zona;
+    
+    public Cliente(String nif,String nombre){
+        this.nif = nif;
+        this.nombre = nombre;
+    }
+    
+    public Cliente(){
+        
+    }
     
     
     public int getIdCliente() {
@@ -64,8 +78,20 @@ public class Cliente implements Serializable{
         this.nombre = nombre;
     }
     
-    public void insertCliente(){
-        
+    public Sector getSector() {
+        return sector;
     }
+
+    public void setSector(Sector sector) {
+        this.sector = sector;
+    }
+
+    public Zona getZona() {
+        return zona;
+    }
+
+    public void setZona(Zona zona) {
+        this.zona = zona;
+    }    
     
 }

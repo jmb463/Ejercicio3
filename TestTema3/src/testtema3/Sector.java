@@ -7,6 +7,7 @@ package testtema3;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -26,7 +27,16 @@ public class Sector implements Serializable{
     private String descripcion;
     
     @ManyToMany(mappedBy="Sector", fetch=FetchType.LAZY)
-    private ArrayList <Articulo> articulos; //Recuperar de forma diferida
+    private List <Articulo> articulos; //Recuperar de forma diferida
+    
+    public Sector(int idSector, String descripcion){
+        this.idSector = idSector;
+        this.descripcion = descripcion;
+    }
+    
+    public Sector(){
+        
+    }
 
     public int getIdSector() {
         return idSector;
