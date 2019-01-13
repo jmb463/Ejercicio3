@@ -19,7 +19,6 @@ import javax.persistence.OrderBy;
 /**
  *
  * @author windeveloper 
- * prueba de updateo
  */
 @Entity
 public class Zona implements Serializable{
